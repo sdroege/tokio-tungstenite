@@ -19,8 +19,8 @@ stream = ["bytes"]
 
 [dependencies]
 log = "0.4"
-futures-preview = { version = "0.3.0-alpha.19", features = ["async-await"] }
-pin-project = "0.4.0-alpha.9"
+futures = { version = "0.3", features = ["async-await"] }
+pin-project = "0.4"
 tokio-io = "0.2.0-alpha.6"
 
 [dependencies.tungstenite]
@@ -49,4 +49,4 @@ version = "0.3.0-alpha.6"
 [dev-dependencies]
 tokio = "0.2.0-alpha.6"
 url = "2.0.0"
-env_logger = "0.6.1"
+env_logger = "0.7"
