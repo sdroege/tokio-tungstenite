@@ -1,4 +1,3 @@
-use futures::StreamExt;
 use std::net::ToSocketAddrs;
 use tokio::net::tcp::{TcpListener, TcpStream};
 use tokio_tungstenite::{accept_async, client_async};
@@ -13,11 +12,9 @@ async fn handshakes() {
             .expect("Not a valid address")
             .next()
             .expect("No address resolved");
-        let listener = TcpListener::bind(&address).await.unwrap();
-        let mut connections = listener.incoming();
+        let mut listener = TcpListener::bind(&address).await.unwrap();
         tx.send(()).unwrap();
-        while let Some(connection) = connections.next().await {
-            let connection = connection.expect("Failed to accept connection");
+        while let Ok((connection, _)) = listener.accept().await {
             let stream = accept_async(connection).await;
             stream.expect("Failed to handshake with connection");
         }
