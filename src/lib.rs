@@ -379,6 +379,7 @@ where
 #[cfg(test)]
 mod tests {
     use crate::compat::AllowStd;
+    #[cfg(feature="connect")]
     use crate::connect::encryption::AutoStream;
     use crate::WebSocketStream;
     use std::io::{Read, Write};
@@ -395,10 +396,13 @@ mod tests {
         is_read::<AllowStd<tokio::net::TcpStream>>();
         is_write::<AllowStd<tokio::net::TcpStream>>();
 
+        #[cfg(feature="connect")]
         is_async_read::<AutoStream<tokio::net::TcpStream>>();
+        #[cfg(feature="connect")]
         is_async_write::<AutoStream<tokio::net::TcpStream>>();
 
         is_unpin::<WebSocketStream<tokio::net::TcpStream>>();
+        #[cfg(feature="connect")]
         is_unpin::<WebSocketStream<AutoStream<tokio::net::TcpStream>>>();
     }
 }

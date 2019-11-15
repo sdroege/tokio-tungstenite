@@ -54,7 +54,6 @@ pub use self::encryption::MaybeTlsStream;
 
 #[cfg(not(feature = "tls"))]
 pub(crate) mod encryption {
-    use futures::{future, Future};
     use tokio_io::{AsyncRead, AsyncWrite};
 
     use tungstenite::stream::Mode;
