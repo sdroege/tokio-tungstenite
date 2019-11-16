@@ -24,9 +24,7 @@ pin-project = "0.4"
 tokio-io = "0.2.0-alpha.6"
 
 [dependencies.tungstenite]
-#version = "0.9.1"
-git = "https://github.com/snapview/tungstenite-rs.git"
-branch = "master"
+version = "0.9.2"
 default-features = false
 
 [dependencies.bytes]
