@@ -28,7 +28,7 @@ pub mod stream;
 use std::io::{Read, Write};
 
 use compat::{cvt, AllowStd};
-use futures::{Stream, Sink};
+use futures::{Sink, Stream};
 use log::*;
 use pin_project::pin_project;
 use std::future::Future;
@@ -295,9 +295,9 @@ where
 }
 
 impl<T> Sink<Message> for WebSocketStream<T>
-    where
-        T: AsyncRead + AsyncWrite + Unpin,
-        AllowStd<T>: Read + Write,
+where
+    T: AsyncRead + AsyncWrite + Unpin,
+    AllowStd<T>: Read + Write,
 {
     type Error = WsError;
 
@@ -308,7 +308,9 @@ impl<T> Sink<Message> for WebSocketStream<T>
     fn start_send(mut self: Pin<&mut Self>, item: Message) -> Result<(), Self::Error> {
         match (*self).with_context(None, |s| s.write_message(item)) {
             Ok(()) => Ok(()),
-            Err(::tungstenite::Error::Io(ref err)) if err.kind() == std::io::ErrorKind::WouldBlock => {
+            Err(::tungstenite::Error::Io(ref err))
+                if err.kind() == std::io::ErrorKind::WouldBlock =>
+            {
                 // the message was accepted and queued
                 // isn't an error.
                 Ok(())
@@ -352,7 +354,10 @@ where
     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
         let this = self.project();
         let message = this.message.take().expect("Cannot poll twice");
-        Poll::Ready(this.stream.with_context(Some(cx), |s| s.write_message(message)))
+        Poll::Ready(
+            this.stream
+                .with_context(Some(cx), |s| s.write_message(message)),
+        )
     }
 }
 
@@ -379,7 +384,7 @@ where
 #[cfg(test)]
 mod tests {
     use crate::compat::AllowStd;
-    #[cfg(feature="connect")]
+    #[cfg(feature = "connect")]
     use crate::connect::encryption::AutoStream;
     use crate::WebSocketStream;
     use std::io::{Read, Write};
@@ -396,13 +401,13 @@ mod tests {
         is_read::<AllowStd<tokio::net::TcpStream>>();
         is_write::<AllowStd<tokio::net::TcpStream>>();
 
-        #[cfg(feature="connect")]
+        #[cfg(feature = "connect")]
         is_async_read::<AutoStream<tokio::net::TcpStream>>();
-        #[cfg(feature="connect")]
+        #[cfg(feature = "connect")]
         is_async_write::<AutoStream<tokio::net::TcpStream>>();
 
         is_unpin::<WebSocketStream<tokio::net::TcpStream>>();
-        #[cfg(feature="connect")]
+        #[cfg(feature = "connect")]
         is_unpin::<WebSocketStream<AutoStream<tokio::net::TcpStream>>>();
     }
 }
