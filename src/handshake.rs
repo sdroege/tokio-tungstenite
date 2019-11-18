@@ -165,7 +165,9 @@ where
 
         let machine = s.get_mut();
         trace!("Setting context in handshake");
-        machine.get_mut().set_context((true, cx as *mut _ as *mut ()));
+        machine
+            .get_mut()
+            .set_context((true, cx as *mut _ as *mut ()));
 
         match s.handshake() {
             Ok(stream) => Poll::Ready(Ok(stream)),
