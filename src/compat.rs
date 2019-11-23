@@ -46,6 +46,7 @@ where
         unsafe {
             if !self.context.0 {
                 //was called by start_send without context
+                debug!("start_send without context");
                 return Poll::Pending
             }
             assert!(!self.context.1.is_null());
@@ -121,7 +122,10 @@ where
 pub(crate) fn cvt<T>(r: Result<T, WsError>) -> Poll<Result<T, WsError>> {
     match r {
         Ok(v) => Poll::Ready(Ok(v)),
-        Err(WsError::Io(ref e)) if e.kind() == std::io::ErrorKind::WouldBlock => Poll::Pending,
+        Err(WsError::Io(ref e)) if e.kind() == std::io::ErrorKind::WouldBlock => {
+            debug!("WouldBlock");
+            Poll::Pending
+        },
         Err(e) => Poll::Ready(Err(e)),
     }
 }
