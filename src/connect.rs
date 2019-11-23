@@ -1,6 +1,6 @@
 //! Connection helper.
-use tokio_io::{AsyncRead, AsyncWrite};
-use tokio_net::tcp::TcpStream;
+use tokio::io::{AsyncRead, AsyncWrite};
+use tokio::net::tcp::TcpStream;
 
 use tungstenite::client::url_mode;
 use tungstenite::handshake::client::Response;
@@ -54,7 +54,7 @@ pub use self::encryption::MaybeTlsStream;
 
 #[cfg(not(feature = "tls"))]
 pub(crate) mod encryption {
-    use tokio_io::{AsyncRead, AsyncWrite};
+    use tokio::io::{AsyncRead, AsyncWrite};
 
     use tungstenite::stream::Mode;
     use tungstenite::Error;
@@ -124,7 +124,8 @@ where
         .port_or_known_default()
         .expect("Bug: port unknown");
 
-    let try_socket = TcpStream::connect((domain.as_str(), port)).await;
+    let addr = format!("{}:{}", domain, port);
+    let try_socket = TcpStream::connect(addr).await;
     let socket = try_socket.map_err(Error::Io)?;
     client_async_tls(request, socket).await
 }
