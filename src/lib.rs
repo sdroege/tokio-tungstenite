@@ -34,7 +34,7 @@ use pin_project::pin_project;
 use std::future::Future;
 use std::pin::Pin;
 use std::task::{Context, Poll};
-use tokio_io::{AsyncRead, AsyncWrite};
+use tokio::io::{AsyncRead, AsyncWrite};
 
 use tungstenite::{
     error::Error as WsError,
@@ -383,7 +383,7 @@ mod tests {
     use crate::connect::encryption::AutoStream;
     use crate::WebSocketStream;
     use std::io::{Read, Write};
-    use tokio_io::{AsyncReadExt, AsyncWriteExt};
+    use tokio::io::{AsyncReadExt, AsyncWriteExt};
 
     fn is_read<T: Read>() {}
     fn is_write<T: Write>() {}

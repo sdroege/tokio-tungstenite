@@ -6,7 +6,7 @@
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
-use tokio_io::{AsyncRead, AsyncWrite};
+use tokio::io::{AsyncRead, AsyncWrite};
 
 /// Stream, either plain TCP or TLS.
 pub enum Stream<S, T> {
