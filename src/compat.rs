@@ -10,7 +10,7 @@ pub(crate) trait HasContext {
     fn set_context(&mut self, context: (bool, *mut ()));
 }
 #[derive(Debug)]
-pub struct AllowStd<S> {
+pub(crate) struct AllowStd<S> {
     pub(crate) inner: S,
     pub(crate) context: (bool, *mut ()),
 }
