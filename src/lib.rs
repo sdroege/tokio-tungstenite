@@ -273,7 +273,6 @@ impl<S> WebSocketStream<S> {
 impl<T> Stream for WebSocketStream<T>
 where
     T: AsyncRead + AsyncWrite + Unpin,
-    AllowStd<T>: Read + Write,
 {
     type Item = Result<Message, WsError>;
 
@@ -297,7 +296,6 @@ where
 impl<T> Sink<Message> for WebSocketStream<T>
 where
     T: AsyncRead + AsyncWrite + Unpin,
-    AllowStd<T>: Read + Write,
 {
     type Error = WsError;
 
