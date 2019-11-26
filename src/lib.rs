@@ -28,10 +28,9 @@ pub mod stream;
 use std::io::{Read, Write};
 
 use compat::{cvt, AllowStd, ContextWaker};
-use futures::{Sink, Stream};
+use futures::{Sink, SinkExt, Stream};
 use log::*;
 use pin_project::pin_project;
-use std::future::Future;
 use std::pin::Pin;
 use std::task::{Context, Poll};
 use tokio::io::{AsyncRead, AsyncWrite};
@@ -248,11 +247,8 @@ impl<S> WebSocketStream<S> {
     where
         S: AsyncRead + AsyncWrite + Unpin,
     {
-        let f = CloseFuture {
-            stream: self,
-            message: Some(msg),
-        };
-        f.await
+        let msg = msg.map(|msg| msg.into_owned());
+        self.send(Message::Close(msg)).await
     }
 }
 
@@ -319,29 +315,6 @@ where
                 Poll::Ready(Err(err))
             }
         }
-    }
-}
-
-#[pin_project]
-struct CloseFuture<'a, T> {
-    stream: &'a mut WebSocketStream<T>,
-    message: Option<Option<CloseFrame<'a>>>,
-}
-
-impl<'a, T> Future for CloseFuture<'a, T>
-where
-    T: AsyncRead + AsyncWrite + Unpin,
-    AllowStd<T>: Read + Write,
-{
-    type Output = Result<(), WsError>;
-
-    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
-        let this = self.project();
-        let message = this.message.take().expect("Cannot poll twice");
-        Poll::Ready(
-            this.stream
-                .with_context(Some((ContextWaker::Write, cx)), |s| s.close(message)),
-        )
     }
 }
 
