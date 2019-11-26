@@ -1,6 +1,6 @@
 //! Connection helper.
 use tokio::io::{AsyncRead, AsyncWrite};
-use tokio::net::tcp::TcpStream;
+use tokio::net::TcpStream;
 
 use tungstenite::client::url_mode;
 use tungstenite::handshake::client::Response;
