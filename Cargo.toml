@@ -29,7 +29,7 @@ default-features = false
 
 [dependencies.bytes]
 optional = true
-version = "0.4.8"
+version = "0.5"
 
 [dependencies.native-tls]
 optional = true
@@ -41,4 +41,4 @@ version = "0.3"
 
 [dev-dependencies]
 url = "2.0.0"
-env_logger = "0.6"
+env_logger = "0.7"
