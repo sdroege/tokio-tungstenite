@@ -13,7 +13,7 @@ pub(crate) mod encryption {
     use native_tls::TlsConnector;
     use tokio_tls::{TlsConnector as TokioTlsConnector, TlsStream};
 
-    use tokio_io::{AsyncRead, AsyncWrite};
+    use tokio::io::{AsyncRead, AsyncWrite};
 
     use tungstenite::stream::Mode;
     use tungstenite::Error;
