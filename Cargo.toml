@@ -15,7 +15,7 @@ edition = "2018"
 default = ["connect"]
 connect = ["stream", "tokio/net"]
 tls = ["native-tls", "tokio-tls", "stream", "tungstenite/tls"]
-stream = ["bytes"]
+stream = []
 
 [dependencies]
 log = "0.4"
@@ -26,10 +26,6 @@ tokio = "0.2"
 [dependencies.tungstenite]
 version = "0.9.2"
 default-features = false
-
-[dependencies.bytes]
-optional = true
-version = "0.5"
 
 [dependencies.native-tls]
 optional = true
